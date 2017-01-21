@@ -1,11 +1,13 @@
-﻿using Papae2D.AudioEngine;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BirdController : MonoBehaviour
 {
     // Flap force
     public float flapForce = 200;
-
+    [Header("Sound References")]
+    public AudioClip deathClip;
+    public AudioClip flapClip;
+    public AudioClip pointClip;
 
     private Rigidbody2D rigidbody2DComponent;
     private Animator animatorComponent;
@@ -33,14 +35,14 @@ public class BirdController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (SceneController.Instance.IsGameRunning && isAlive)
+        if (SceneController.Instance.IsGameRunning && isAlive)
         { 
             // Flap
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
+            //if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
             {
                 rigidbody2DComponent.velocity = Vector2.zero;
                 rigidbody2DComponent.AddForce(Vector2.up * flapForce);
-                //AudioManager.PlayOneShot(AudioManager.GetClipFromAssetList("flap"));
+                //AudioSource.PlayClipAtPoint(flapClip, Vector3.zero);
             }
         }
     }
@@ -103,8 +105,9 @@ public class BirdController : MonoBehaviour
 
             SceneController.Instance.IncrementScore();
 
-			//AudioManager.PlayOneShot(AudioManager.GetClipFromAssetList("point"));
-		}else if(collider.gameObject.tag == "Pipe")
+            //AudioSource.PlayClipAtPoint(pointClip, Vector3.zero);
+        }
+        else if(collider.gameObject.tag == "Pipe")
 		{
 			KillBird();
 		}
@@ -117,7 +120,7 @@ public class BirdController : MonoBehaviour
 		isAlive = false;
 		rigidbody2DComponent.velocity = Vector2.zero;
 		animatorComponent.SetTrigger("Die");
-		//AudioManager.PlayOneShot(AudioManager.GetClipFromAssetList("death"));
+        //AudioSource.PlayClipAtPoint(deathClip, Vector3.zero);
 		SceneController.Instance.GameOver();
 	}
 }
