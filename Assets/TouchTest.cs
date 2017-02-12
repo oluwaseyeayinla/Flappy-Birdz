@@ -1,8 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
+#if UNITY_EDITOR
+class EditorUtilities
+{
+    public static string fileName = "Screenshot ";
+    public static int startNumber = 1;
+    [MenuItem("Editor/Capture Game Screen %^s")]
+    static void TakeScreenshot()
+    {
+        int number = startNumber;
+        string name = "" + number;
+
+        while (System.IO.File.Exists(fileName + name + ".png"))
+        {
+            number++;
+            name = "" + number;
+        }
+
+        startNumber = number + 1;
+
+        Application.CaptureScreenshot(fileName + name + ".png");
+    }
+}
+#endif
 
 public class TouchTest : MonoBehaviour {
 
