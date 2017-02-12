@@ -114,7 +114,7 @@ public class PaletteSwapper : MonoBehaviour
     }
 }
 
-
+#if UNITY_EDITOR
 [CustomEditor(typeof(PaletteSwapper))]
 public class PaletteSwapperEditor : Editor
 {
@@ -131,3 +131,4 @@ public class PaletteSwapperEditor : Editor
         base.DrawDefaultInspector();
     }
 }
+#endif
