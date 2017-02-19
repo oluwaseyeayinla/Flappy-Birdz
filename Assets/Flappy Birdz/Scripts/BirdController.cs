@@ -10,10 +10,11 @@ public class BirdController : MonoBehaviour
     [SerializeField] AudioClip flapClip;
     [SerializeField] AudioClip pointClip;
 
-
-    private PaletteSwapper paletteSwapperComponent;
-    private Rigidbody2D rigidbody2DComponent;
-    private Animator animatorComponent;
+    
+    private PaletteSwapper paletteSwapperComponent = null;
+    private Rigidbody2D rigidbody2DComponent = null;
+    private Animator animatorComponent = null;
+    private Vector3 birdPosition = new Vector3(-0.914f, 2.075f, 0);
     private Vector3 birdRotation = Vector3.zero;
     private int birdPalette = 0;
     private float RotateUpSpeed = 1, RotateDownSpeed = 1;
@@ -37,6 +38,17 @@ public class BirdController : MonoBehaviour
         rigidbody2DComponent = GetComponent<Rigidbody2D>();
         animatorComponent = GetComponent<Animator>();
         paletteSwapperComponent = GetComponent<PaletteSwapper>();
+
+        transform.position = birdPosition;
+        transform.eulerAngles = birdRotation = Vector3.zero;
+
+        animatorComponent.Play("Flying");
+    }
+
+    public void Restart()
+    {
+        Awake();
+        Start();
     }
 
     // Use this for initialization
@@ -77,7 +89,8 @@ public class BirdController : MonoBehaviour
             // Flap
             rigidbody2DComponent.velocity = Vector2.zero;
             rigidbody2DComponent.AddForce(Vector2.up * flapForce);
-            AudioSource.PlayClipAtPoint(flapClip, Vector3.zero);
+
+            AudioSource.PlayClipAtPoint(flapClip, Vector3.zero, SceneController.Instance.IsSoundEnabled ? 1 : 0);
         }
     }
 
@@ -129,7 +142,7 @@ public class BirdController : MonoBehaviour
             {
                 SceneController.Instance.IncrementScore();
 
-                AudioSource.PlayClipAtPoint(pointClip, Vector3.zero);
+                AudioSource.PlayClipAtPoint(pointClip, Vector3.zero, SceneController.Instance.IsSoundEnabled ? 1 : 0);
             }
         }
         else if(collider.gameObject.CompareTag("Pipe"))
@@ -145,7 +158,7 @@ public class BirdController : MonoBehaviour
         animatorComponent.SetTrigger("Die");
         isAlive = false;
 		rigidbody2DComponent.velocity = Vector2.zero;
-        AudioSource.PlayClipAtPoint(deathClip, Vector3.zero);
+        AudioSource.PlayClipAtPoint(deathClip, Vector3.zero, SceneController.Instance.IsSoundEnabled ? 1 : 0);
 
         int unlocked = GameData.LoadIntValue("Birdz Unlocked");
         birdPalette += 1;

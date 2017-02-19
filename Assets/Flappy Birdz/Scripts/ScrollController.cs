@@ -14,6 +14,11 @@ public class ScrollController : MonoBehaviour
     [SerializeField] float scrollSpeed;
     private Rigidbody2D rigidbody2DComponent;
 
+    public void Restart()
+    {
+        Start();
+    }
+
     // Use this for initialization
     void Start ()
     {

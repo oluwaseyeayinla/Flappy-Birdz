@@ -15,7 +15,6 @@ public enum TreeType
 
 public class TreeController : MonoBehaviour
 {
-
     [Header("Scroll Properties")]
     [SerializeField] ScrollController.ScrollDirection scrollDirection;
     [SerializeField] float scrollSpeed;

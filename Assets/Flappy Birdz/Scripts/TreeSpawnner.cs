@@ -21,8 +21,8 @@ public class TreeSpawnner : MonoBehaviour
 
     private GameObject[] trees;
     private Vector2 defaultLocation = new Vector2(-8f, 0);
-    private int currentTree;
-    private float timeSinceLastSpawned;
+    private int currentTree = 0;
+    private float timeSinceLastSpawned = 0;
     private float minTreeY = -1f;
     private float maxTreeY = 3.5f;
     private float treeY;
@@ -37,6 +37,16 @@ public class TreeSpawnner : MonoBehaviour
             trees[i].transform.SetParent(poolContainer, false);
         }
 	}
+
+    public void Restart()
+    {
+        timeSinceLastSpawned = 0;
+
+        for (int i = 0; i < poolSize; i++)
+        {
+            trees[i].transform.position = defaultLocation;
+        }
+    }
 
     public void SpawnNewTree(TreeType type)
     {
@@ -91,6 +101,9 @@ public class TreeSpawnner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timeSinceLastSpawned += Time.deltaTime;
+        if(SceneController.Instance.IsGameRunning)
+        {
+            timeSinceLastSpawned += Time.deltaTime;
+        }
 	}
 }

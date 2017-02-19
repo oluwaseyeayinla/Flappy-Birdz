@@ -10,6 +10,7 @@ using Random = UnityEngine.Random;
 
 public class SceneController : MonoBehaviour {
 
+    #region Structs
     [Serializable]
     public struct Level
     {
@@ -23,6 +24,9 @@ public class SceneController : MonoBehaviour {
         public Sprite medal;
         public int score;
     }
+    #endregion
+
+    #region Public Variables
 
     public static SceneController Instance = null;
 
@@ -36,19 +40,28 @@ public class SceneController : MonoBehaviour {
         get { return Instance.gameIsOver; }
     }
 
+    public bool IsSoundEnabled
+    {
+        get { return Instance.soundIsEnabled; }
+    }
+
+    #endregion
+
+    #region Inspector Variables
+
+    [Header("Gamfari References")]
+    public GameObject gamfariLoginPanel;
+    public Button gamfariLeaderboardButton;
+
     [Header("North Panel References")]
     public Text scoreText;
     public Button pauseButton;
+    public Button soundButton;
 
     [Header("GameOver Panel References")]
     public Text playerScoreLabel;
     public Text bestScoreLabel;
     public Image medal;
-
-    [Header("Medal References")]
-    public Reward gold;
-    public Reward silver;
-    public Reward bronze;
 
     [Header("UI References References")]
     public GameObject startPanel;
@@ -56,30 +69,36 @@ public class SceneController : MonoBehaviour {
     public GameObject gameoverPanel;
     public GameObject southPanel;
 
+    [Header("Medal References")]
+    public Reward gold;
+    public Reward silver;
+    public Reward bronze;
+
     [Header("Player Reference")]
     public BirdController bird;
+
+    [Header("Ground References")]
+    public ScrollController ground1;
+    public ScrollController ground2;
 
     [Header("Tree Spawnner Property")]
     public TreeSpawnner treeSpawnner;
     public Level[] levels;
 
+    #endregion
 
-
+    #region Private Varibles
     private int playerScore = 0, bestScore = 0;
     private bool gameHasStarted;
     private bool gameIsOver;
     private bool gameIsPaused;
+    private bool soundIsEnabled = true;
+    #endregion
 
 
     // Use this for initialization
     void Awake()
     {
-        Init();
-
-        gameHasStarted = false;
-        gameIsOver = false;
-        gameIsPaused = false;
-
         if (Instance == null)
         {
             Instance = this;
@@ -88,19 +107,7 @@ public class SceneController : MonoBehaviour {
             Destroy(this.gameObject);
         }
 
-        pauseButton.gameObject.SetActive(false);
-
-        playerScore = 0;
-        scoreText.gameObject.SetActive(true);
-        scoreText.text = playerScore.ToString();
-
-        startPanel.SetActive(true);
-        pausePanel.SetActive(false);
-        gameoverPanel.SetActive(false);
-
-        southPanel.SetActive(true);
-
-        Time.timeScale = 0;
+        Init();
     }
 
     void Init()
@@ -112,6 +119,36 @@ public class SceneController : MonoBehaviour {
             GameData.SaveIntValue("Birdz Unlocked", 1);
             GameData.SaveFreshInstall(true);
         }
+    }
+
+    void Restart()
+    {
+        Awake();
+        Start();
+    }
+
+    void Start()
+    {
+        gameHasStarted = false;
+        gameIsOver = false;
+        gameIsPaused = false;
+
+        pauseButton.gameObject.SetActive(false);
+
+        playerScore = 0;
+        scoreText.gameObject.SetActive(true);
+        scoreText.text = playerScore.ToString();
+
+        soundButton.transform.FindChild("on").GetComponent<Image>().enabled = soundIsEnabled;
+        soundButton.transform.FindChild("off").GetComponent<Image>().enabled = !soundIsEnabled;
+
+        startPanel.SetActive(true);
+        pausePanel.SetActive(false);
+        gameoverPanel.SetActive(false);
+
+        southPanel.SetActive(true);
+
+        Time.timeScale = 0;
     }
 
     // Update is called once per frame
@@ -132,18 +169,24 @@ public class SceneController : MonoBehaviour {
 
             return;
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
+    public void Tap()
+    {
+        if (!gameHasStarted)
         {
-            if (!gameHasStarted)
-            {
-                StartGame();
-            }
-            else if (gameIsPaused)
-            {
-                ResumeGame();
-            }
+            StartGame();
+            return;
         }
+
+
+        if (gameIsPaused)
+        {
+            ResumeGame();
+            return;
+        }
+
+        bird.FlapBird();
     }
 
     TreeType GetRandomMovementBasedOnScore(int score)
@@ -163,11 +206,11 @@ public class SceneController : MonoBehaviour {
     {
         if (gameIsOver)
         {
-            #if UNITY_5_3_OR_NEWER
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            #else
-            Application.LoadLevel(Application.loadedLevel);
-            #endif
+            ground1.Restart();
+            ground2.Restart();
+            bird.Restart();
+            treeSpawnner.Restart();
+            Restart();
         }
     }
 
@@ -282,5 +325,12 @@ public class SceneController : MonoBehaviour {
         pauseButton.gameObject.SetActive(false);
         gameoverPanel.SetActive(true);
         gameIsOver = true;
+    }
+
+    public void ToggleSound()
+    {
+        soundIsEnabled = !soundIsEnabled;
+        soundButton.transform.FindChild("on").GetComponent<Image>().enabled = soundIsEnabled;
+        soundButton.transform.FindChild("off").GetComponent<Image>().enabled = !soundIsEnabled;
     }
 }
