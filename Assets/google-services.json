@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1098903210843",
+    "firebase_url": "https://flappy-birdz.firebaseio.com",
+    "project_id": "flappy-birdz",
+    "storage_bucket": "flappy-birdz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1098903210843:android:70f3f88ba81e8317",
+        "android_client_info": {
+          "package_name": "me.oluwaseyeayinla.flappybirdz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1098903210843-4otm97lo79246ec536lfbqkhs6jhu38a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwR6K_q6qiJsbKqddvoXaHKiqISPeV0Cg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

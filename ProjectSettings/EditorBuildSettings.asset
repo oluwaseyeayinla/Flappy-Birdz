@@ -6,4 +6,4 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Flappy Birdz/Scenes/Gamfari Scene.unity
+    path: Assets/Flappy Birdz/Scenes/Android Scene.unity

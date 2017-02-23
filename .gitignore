@@ -3,6 +3,9 @@
 /[Oo]bj/
 /[Bb]inaries/
 /[Bb]uilds/
+/Assets/Editor Default Resources/
+/Assets/PlayServicesResolver*/*
+/Assets/Firebase*/*
 /Assets/Plugins*/*
 /Assets/ThirdParty*/*
 
